@@ -13,7 +13,7 @@ flex-wrap: wrap;
 list-style-type: none;
 padding: 0;
 }
-.heroes li {
+.heroes .hero {
 cursor: pointer;
 position: relative;
 right: 0;
@@ -26,11 +26,11 @@ width: 20vw;
 border-radius: 50%;
 box-shadow: -5px 0 10px 5px #fff, 5px 0 10px 5px #fff;
 }
-.heroes li.selected:hover {
+.heroes .hero.selected:hover {
 background-color: rgb(247, 233, 108) !important;
 color: rgb(17, 57, 141);
 }
-.heroes li:hover {
+.heroes .hero:hover {
 color: rgb(247, 233, 108);
 background-color: rgb(17, 57, 141);
 left: .1em;
