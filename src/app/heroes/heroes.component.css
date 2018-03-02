@@ -5,6 +5,7 @@ body {
 .selected {
     background-color: rgba(247, 233, 108, 0.904) !important;
     color: rgb(17, 57, 141);
+    border: none;
 }
 .heroes {
 display: flex;

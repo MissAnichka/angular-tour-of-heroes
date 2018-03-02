@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class HeroService {
@@ -14,19 +15,33 @@ export class HeroService {
   ) { }
 
   private log(message: string){
-    this.messageService.add('(HeroService)' + message);
+    this.messageService.add('(HeroService): ' + message);
   }
 
   private heroesUrl = 'api/heroes';
-  private heroUrl = 'api/detail/:id';
 
   getHeroes(): Observable<Hero[]> {
-    this.messageService.add("(HeroService): Heroes are flyin at ya!")
-    return this.http.get<Hero[]>(this.heroesUrl);
+    return this.http.get<Hero[]>(this.heroesUrl)
+      .pipe(
+        tap(heroes => this.log('Heroes are flyin at ya!')),
+        catchError(this.handleError('getHeroes', []))
+      )
   }
 
   getHero(id: number): Observable<Hero> {
-    this.messageService.add(`(HeroService): Got your signal, hero no. ${id} to the rescue!`)
-    return this.http.get<Hero>(this.heroUrl);
+    const url = `${this.heroesUrl}/${id}`
+    return this.http.get<Hero>(url)
+      .pipe(
+        tap(_ => this.log(`Got your signal, hero no.${id} to the rescue!`)),
+        catchError(this.handleError<Hero>(`getHero id=${id}`))
+      )
+  }
+
+  private handleError<T> (operation = 'operation', result?: T){
+    return (error: any): Observable<T> => {
+      console.error(error)
+      this.log(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
   }
 }
