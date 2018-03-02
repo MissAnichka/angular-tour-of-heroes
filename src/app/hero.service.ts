@@ -7,6 +7,10 @@ import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
+const httpOptions = {
+  headers: new HttpHeaders({ 'content-type': 'application/json' })
+}
+
 @Injectable()
 export class HeroService {
   constructor(
@@ -34,6 +38,22 @@ export class HeroService {
       .pipe(
         tap(_ => this.log(`Got your signal, hero no.${id} to the rescue!`)),
         catchError(this.handleError<Hero>(`getHero id=${id}`))
+      )
+  }
+
+  updateHero(hero: Hero): Observable<any> {
+    return this.http.put(this.heroesUrl, hero, httpOptions)
+      .pipe(
+        tap(_ => this.log(`${hero.name} is making moves!`)),
+        catchError(this.handleError<any>('updateHero'))
+      )
+  }
+
+  addHero(hero: Hero): Observable<Hero> {
+    return this.http.post<Hero>(this.heroesUrl, hero, httpOptions)
+      .pipe(
+        tap((hero: Hero) => this.log(`${hero.name} is born!`)),
+        catchError(this.handleError<Hero>('addHero'))
       )
   }
 
