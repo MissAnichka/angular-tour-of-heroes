@@ -25,6 +25,7 @@
     "aws-amplify": "^0.2.11",
     "core-js": "^2.4.1",
     "rxjs": "^5.5.6",
+    "stream": "0.0.2",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {
