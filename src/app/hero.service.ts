@@ -10,7 +10,7 @@ import { MessageService } from './message.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-}
+};
 
 @Injectable()
 export class HeroService {
@@ -19,18 +19,18 @@ export class HeroService {
     private messageService: MessageService
   ) { }
 
-  private log(message: string){
+  private heroesUrl = 'api/heroes';
+
+  private log(message: string) {
     this.messageService.add('(HeroService): ' + message);
   }
-
-  private heroesUrl = 'api/heroes';
 
   getHeroes(): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
         tap(heroes => this.log('Heroes are flyin at ya!')),
         catchError(this.handleError('getHeroes', []))
-      )
+      );
   }
 
   getHero<Data>(id: number): Observable<Hero> {
@@ -40,7 +40,7 @@ export class HeroService {
         map(heroes => heroes[0]),
         tap(h => {
           const outcome = h ? 'got it!' : 'NOPE';
-          this.log(`${outcome} hero id=${id}`)
+          this.log(`${outcome} hero id=${id}`);
         }),
         catchError(this.handleError<Hero>(`getHero id=${id}`))
       );
@@ -51,7 +51,7 @@ export class HeroService {
       .pipe(
         tap(_ => this.log(`${hero.name} is making moves!`)),
         catchError(this.handleError<any>('updateHero'))
-      )
+      );
   }
 
   addHero(hero: Hero): Observable<Hero> {
@@ -59,7 +59,7 @@ export class HeroService {
       .pipe(
         tap((hero: Hero) => this.log(`${hero.name} is born!`)),
         catchError(this.handleError<Hero>('addHero'))
-      )
+      );
   }
 
   deleteHero(hero: Hero | number): Observable<Hero> {
@@ -71,11 +71,11 @@ export class HeroService {
       .pipe(
         tap(_ => this.log(`Oh no! ${nameOrId} vanished!`)),
         catchError(this.handleError<Hero>('deleteHero'))
-      )
+      );
   }
 
   searchHeroes(term: string): Observable<Hero[]> {
-    if(!term.trim()){
+    if (!term.trim()) {
       return of([]);
     }
     return this.http.get<Hero[]>(`api/heroes/?name=${term}`)
@@ -86,7 +86,7 @@ export class HeroService {
 
   }
 
-  private handleError<T> (operation = 'operation', result?: T){
+  private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error)
       this.log(`${operation} failed: ${error.message}`);
